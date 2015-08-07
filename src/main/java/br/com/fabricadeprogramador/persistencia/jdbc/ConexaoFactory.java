@@ -9,6 +9,15 @@ public class ConexaoFactory {
 	public static Connection getConnection() {
 
 		Connection c=null;
+		
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 		try {
 			c = DriverManager
 					.getConnection("jdbc:postgresql://localhost:5432/fabricaweb", "postgres","postgres");
