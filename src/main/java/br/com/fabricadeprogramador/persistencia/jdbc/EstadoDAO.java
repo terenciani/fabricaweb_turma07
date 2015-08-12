@@ -2,6 +2,9 @@ package br.com.fabricadeprogramador.persistencia.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.fabricadeprogramador.persistencia.entidade.Estado;
 
@@ -55,4 +58,46 @@ public class EstadoDAO {
 		}
 		
 	}
+	
+	public void delete(Estado estado) {
+		String sql = "DELETE FROM estado WHERE id=?";
+
+		// Criando objeto statement
+		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
+			preparador.setInt(1, estado.getId());
+
+			// executando no banco
+			preparador.execute();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public List<Estado> buscarTodos() {
+		List <Estado> estados = new ArrayList<Estado>();
+		String sql = "SELECT * FROM estado";
+
+		// Criando objeto statement
+		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
+						// executando no banco
+			ResultSet rs = preparador.executeQuery();
+			Estado estado;
+			while (rs.next()){
+				estado = new Estado();
+				estado.setId(rs.getInt("id"));
+				estado.setUF(rs.getString("uf"));
+				estado.setNome(rs.getString("nome"));
+				estados.add(estado);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return estados;
+	}
+
+	
 }

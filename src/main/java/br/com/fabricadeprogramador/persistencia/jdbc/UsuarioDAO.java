@@ -2,6 +2,9 @@ package br.com.fabricadeprogramador.persistencia.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.fabricadeprogramador.persistencia.entidade.Usuario;
 
@@ -19,14 +22,14 @@ public class UsuarioDAO {
 		// Obtendo uma conexao com o banco
 		conexao = ConexaoFactory.getConnection();
 	}
-	
+
 	public void salvar(Usuario usuario) {
-		if (usuario.getId() == null || usuario.getId() == 0){
+		if (usuario.getId() == null || usuario.getId() == 0) {
 			cadastrar(usuario);
-		}else{
+		} else {
 			alterar(usuario);
 		}
-		
+
 	}
 
 	public void cadastrar(Usuario usuario) {
@@ -65,7 +68,7 @@ public class UsuarioDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void delete(Usuario usuario) {
 		String sql = "DELETE FROM usuario WHERE id=?";
 
@@ -81,5 +84,52 @@ public class UsuarioDAO {
 		}
 	}
 
+	public List<Usuario> buscarTodos() {
+		String sql = "SELECT * FROM usuario";
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+
+		// Criando objeto statement
+		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
+			// executando no banco
+			ResultSet rs = preparador.executeQuery();
+			Usuario usuario;
+			while (rs.next()) {
+				usuario = new Usuario();
+				usuario.setId(rs.getInt("id"));
+				usuario.setLogin(rs.getString("login"));
+				usuario.setNome(rs.getString("nome"));
+				usuario.setSenha(rs.getString("senha"));
+				usuarios.add(usuario);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuarios;
+	}
+
+	public Usuario buscaPorId(Integer id) {
+		String sql = "SELECT * FROM usuario WHERE id=?";
+		Usuario usuario = null;
+
+		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
+			preparador.setInt(1, id);
+			// executando no banco
+			ResultSet rs = preparador.executeQuery();
+			if (rs.next()) {
+				usuario = new Usuario();
+				usuario.setId(rs.getInt("id"));
+				usuario.setLogin(rs.getString("login"));
+				usuario.setNome(rs.getString("nome"));
+				usuario.setSenha(rs.getString("senha"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return usuario;
+
+	}
 
 }

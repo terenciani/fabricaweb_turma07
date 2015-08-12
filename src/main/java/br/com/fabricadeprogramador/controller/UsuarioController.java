@@ -1,7 +1,9 @@
 package br.com.fabricadeprogramador.controller;
 
 import java.io.IOException;
+import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +26,7 @@ public class UsuarioController extends HttpServlet {
 
 		// Instanciando o objeto usuario
 		Usuario usuario = new Usuario();
-		if (id != null && id !="") {
+		if (id != null && id != "") {
 			usuario.setId(Integer.parseInt(id));
 		}
 
@@ -42,19 +44,31 @@ public class UsuarioController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String acao = req.getParameter("acao");
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		
+		
+		if (acao == null || acao.equals("list")) {
+			//Carregando a lista do banco
+			List <Usuario> lista = usuarioDAO.buscarTodos();
+			//Adicionando atributo no resquest
+			req.setAttribute("ListaUsu", lista);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listausu.jsp");
+			//encaminhando o request e o response para o JSP
+			dispatcher.forward(req, resp);
+		} else {
+			String id = req.getParameter("id");
+			
+			Usuario usuario = new Usuario();
+			if (id != null && id != "") {
+				usuario.setId(Integer.parseInt(id));
 
-		String id = req.getParameter("id");
-
-		Usuario usuario = new Usuario();
-		if (id != null && id != "") {
-			usuario.setId(Integer.parseInt(id));
-
-			UsuarioDAO usuarioDAO = new UsuarioDAO();
-
-			usuarioDAO.delete(usuario);
-			resp.getWriter().print("Usuario Deletado!");
-		}else{
-			resp.getWriter().print("Usuario não pode ser deletado!");
+				
+				usuarioDAO.delete(usuario);
+				resp.getWriter().print("Usuario Deletado!");
+			} else {
+				resp.getWriter().print("Usuario não pode ser deletado!");
+			}
 		}
 	}
 }
