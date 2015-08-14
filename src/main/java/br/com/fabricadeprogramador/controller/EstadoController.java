@@ -3,6 +3,7 @@ package br.com.fabricadeprogramador.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +24,7 @@ public class EstadoController extends HttpServlet {
 		String id = req.getParameter("id");
 
 		Estado estado = new Estado();
-		if (id != null) {
+		if (id != null && id != "") {
 			estado.setId(Integer.parseInt(id));
 		}
 		estado.setNome(nome);
@@ -45,7 +46,10 @@ public class EstadoController extends HttpServlet {
 
 		if (acao == null || acao.equals("list")) {
 			List<Estado> lista = estadoDAO.buscarTodos();
-			resp.getWriter().print(lista);
+			req.setAttribute("listaEstado", lista);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listaestado.jsp");
+			//encaminhando o request e o response para o JSP
+			dispatcher.forward(req, resp);
 		} else {
 			String id = req.getParameter("id");
 

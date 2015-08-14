@@ -26,7 +26,7 @@ public class UsuarioController extends HttpServlet {
 
 		// Instanciando o objeto usuario
 		Usuario usuario = new Usuario();
-		if (id != null && id != "") {
+		if (id != null && id != "0") {
 			usuario.setId(Integer.parseInt(id));
 		}
 
@@ -47,28 +47,39 @@ public class UsuarioController extends HttpServlet {
 		String acao = req.getParameter("acao");
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		
-		
 		if (acao == null || acao.equals("list")) {
 			//Carregando a lista do banco
 			List <Usuario> lista = usuarioDAO.buscarTodos();
 			//Adicionando atributo no resquest
-			req.setAttribute("ListaUsu", lista);
+			req.setAttribute("listaUsu", lista);
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listausu.jsp");
 			//encaminhando o request e o response para o JSP
 			dispatcher.forward(req, resp);
-		} else {
+		} else if (acao.equals("esc")){
 			String id = req.getParameter("id");
-			
 			Usuario usuario = new Usuario();
 			if (id != null && id != "") {
 				usuario.setId(Integer.parseInt(id));
-
-				
 				usuarioDAO.delete(usuario);
 				resp.getWriter().print("Usuario Deletado!");
 			} else {
 				resp.getWriter().print("Usuario não pode ser deletado!");
 			}
+		} else if (acao.equals("alt")) {
+			String id = req.getParameter("id");
+			Usuario usuario = usuarioDAO.buscaPorId(Integer.parseInt(id));
+			req.setAttribute("usu", usuario);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formusuario.jsp");
+			dispatcher.forward(req, resp);
+		}else if (acao.equals("cad")) {
+			Usuario usuario = new Usuario();
+			usuario.setId(0);
+			usuario.setLogin("");
+			usuario.setNome("");
+			usuario.setSenha("");
+			req.setAttribute("usu", usuario);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formusuario.jsp");
+			dispatcher.forward(req, resp);
 		}
 	}
 }
