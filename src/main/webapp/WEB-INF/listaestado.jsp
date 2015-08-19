@@ -10,12 +10,27 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%
-		List <Estado> lista = (List <Estado>) request.getAttribute("listaEstado");
-	
-		for (Estado e : lista){
-			out.print("<br> Estado: " + e.getNome());
-		}
-	%>
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>NOME</th>
+			<th>UF</th>
+			<th>EDITAR</th>
+		</tr>
+		<%
+			//Acessando dados do Servlet
+			List<Estado> lista = (List<Estado>) request.getAttribute("listaEstado");
+			//Gerando linhas na tabela para imprimir os dados
+			for (Estado e : lista) {%>
+		<tr>
+			<td><%=e.getId()%></td>
+			<td><%=e.getNome()%></td>
+			<td><%=e.getUF()%></td>
+			<td><a href="estadocontroller.do?acao=alt&id=<%=e.getId()%>">Editar</a></td>
+		</tr>
+		<%
+			}
+		%>
+	</table>
 </body>
 </html>

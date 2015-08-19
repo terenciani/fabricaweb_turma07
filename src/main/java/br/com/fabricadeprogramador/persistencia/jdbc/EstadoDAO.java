@@ -12,18 +12,18 @@ public class EstadoDAO {
 	private Connection conexao;
 
 	public EstadoDAO() {
-		//Obtendo uma conexao com o banco
+		// Obtendo uma conexao com o banco
 		conexao = ConexaoFactory.getConnection();
 	}
 
-	public void salvar (Estado estado){
-		if (estado.getId() == null || estado.getId() == 0){
-			cadastrar (estado);
-		}else{
-			alterar (estado);
+	public void salvar(Estado estado) {
+		if (estado.getId() == null || estado.getId() == 0) {
+			cadastrar(estado);
+		} else {
+			alterar(estado);
 		}
 	}
-	
+
 	public void cadastrar(Estado estado) {
 		String sql = "INSERT INTO estado (nome, uf) VALUES (?, ?)";
 
@@ -40,10 +40,10 @@ public class EstadoDAO {
 			e.printStackTrace();
 		}
 	}
-	
-	public void alterar(Estado estado){
-		String sql = "UPDATE estado SET nome=?, uf=? where = id=?";
-		
+
+	public void alterar(Estado estado) {
+		String sql = "UPDATE estado SET nome=?, uf=? where id=?";
+
 		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
 
 			preparador.setString(1, estado.getNome());
@@ -56,9 +56,9 @@ public class EstadoDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void delete(Estado estado) {
 		String sql = "DELETE FROM estado WHERE id=?";
 
@@ -72,19 +72,19 @@ public class EstadoDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public List<Estado> buscarTodos() {
-		List <Estado> estados = new ArrayList<Estado>();
+		List<Estado> estados = new ArrayList<Estado>();
 		String sql = "SELECT * FROM estado";
 
 		// Criando objeto statement
 		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
-						// executando no banco
+			// executando no banco
 			ResultSet rs = preparador.executeQuery();
 			Estado estado;
-			while (rs.next()){
+			while (rs.next()) {
 				estado = new Estado();
 				estado.setId(rs.getInt("id"));
 				estado.setUF(rs.getString("uf"));
@@ -95,9 +95,32 @@ public class EstadoDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return estados;
 	}
 
-	
+	public Estado buscaPorId(Integer id) {
+		Estado estado = null;
+		String sql = "SELECT * FROM estado WHERE id=?";
+
+		// Criando objeto statement
+		try (PreparedStatement preparador = conexao.prepareStatement(sql)) {
+			preparador.setInt(1, id);
+			// executando no banco
+			ResultSet rs = preparador.executeQuery();
+
+			while (rs.next()) {
+				estado = new Estado();
+				estado.setId(rs.getInt("id"));
+				estado.setUF(rs.getString("uf"));
+				estado.setNome(rs.getString("nome"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return estado;
+	}
+
 }

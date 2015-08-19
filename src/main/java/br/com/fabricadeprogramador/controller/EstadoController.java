@@ -1,4 +1,4 @@
-package br.com.fabricadeprogramador.controller;
+package br.com.fabricadeprogramador.controller; 
 
 import java.io.IOException;
 import java.util.List;
@@ -24,14 +24,14 @@ public class EstadoController extends HttpServlet {
 		String id = req.getParameter("id");
 
 		Estado estado = new Estado();
-		if (id != null && id != "") {
+		if (id != null && id != "0") {
 			estado.setId(Integer.parseInt(id));
 		}
 		estado.setNome(nome);
 		estado.setUF(uf);
 
 		EstadoDAO estadoDAO = new EstadoDAO();
-		estadoDAO.cadastrar(estado);
+		estadoDAO.salvar(estado);
 
 		resp.getWriter().print("Estado Salvo!");
 
@@ -41,16 +41,16 @@ public class EstadoController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String acao = req.getParameter("acao");
-		
+
 		EstadoDAO estadoDAO = new EstadoDAO();
 
 		if (acao == null || acao.equals("list")) {
 			List<Estado> lista = estadoDAO.buscarTodos();
 			req.setAttribute("listaEstado", lista);
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listaestado.jsp");
-			//encaminhando o request e o response para o JSP
+			// encaminhando o request e o response para o JSP
 			dispatcher.forward(req, resp);
-		} else {
+		} else if (acao.equals("esc")) {
 			String id = req.getParameter("id");
 
 			Estado estado = new Estado();
@@ -62,6 +62,21 @@ public class EstadoController extends HttpServlet {
 			} else {
 				resp.getWriter().print("Estado não pode ser deletado!");
 			}
+		} else if (acao.equals("alt")) {
+			String id = req.getParameter("id");
+			Estado estado = estadoDAO.buscaPorId(Integer.parseInt(id));
+			req.setAttribute("estado", estado);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formestado.jsp");
+			dispatcher.forward(req, resp);
+			
+		} else if (acao.equals("cad")) {
+			Estado estado = new Estado();
+			estado.setId(0);
+			estado.setUF("");
+			estado.setNome("");
+			req.setAttribute("estado", estado);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/formestado.jsp");
+			dispatcher.forward(req, resp);
 		}
 
 	}
