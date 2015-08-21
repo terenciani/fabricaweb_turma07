@@ -50,7 +50,7 @@ public class EstadoController extends HttpServlet {
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listaestado.jsp");
 			// encaminhando o request e o response para o JSP
 			dispatcher.forward(req, resp);
-		} else if (acao.equals("esc")) {
+		} else if (acao.equals("exc")) {
 			String id = req.getParameter("id");
 
 			Estado estado = new Estado();
@@ -58,7 +58,7 @@ public class EstadoController extends HttpServlet {
 				estado.setId(Integer.parseInt(id));
 
 				estadoDAO.delete(estado);
-				resp.getWriter().print("Estado Deletado!");
+				resp.sendRedirect("estadocontroller.do?acao=list");
 			} else {
 				resp.getWriter().print("Estado não pode ser deletado!");
 			}

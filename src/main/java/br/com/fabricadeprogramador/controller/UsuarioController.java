@@ -55,13 +55,13 @@ public class UsuarioController extends HttpServlet {
 			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listausu.jsp");
 			//encaminhando o request e o response para o JSP
 			dispatcher.forward(req, resp);
-		} else if (acao.equals("esc")){
+		} else if (acao.equals("exc")){
 			String id = req.getParameter("id");
 			Usuario usuario = new Usuario();
 			if (id != null && id != "") {
 				usuario.setId(Integer.parseInt(id));
 				usuarioDAO.delete(usuario);
-				resp.getWriter().print("Usuario Deletado!");
+				resp.sendRedirect("usucontroller.do?acao=list");
 			} else {
 				resp.getWriter().print("Usuario não pode ser deletado!");
 			}

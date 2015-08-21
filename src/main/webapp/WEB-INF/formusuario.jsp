@@ -8,15 +8,15 @@
 <title>Insert title here</title>
 
 <script>
-		function excluir(){
-			if (window.confirm("Tem certezar que deseja excluir?")){
-				//Acessando o id preenchido no campo
-				idDigitado = document.getElementById("id").value;
-				//Request GET
-				location.href = "usucontroller.do?id="+idDigitado;
-			}
+	function excluir() {
+		if (window.confirm("Tem certezar que deseja excluir?")) {
+			//Acessando o id preenchido no campo
+			idDigitado = document.getElementById("id").value;
+			//Request GET
+			location.href = "usucontroller.do?id=" + idDigitado;
 		}
-	</script>
+	}
+</script>
 </head>
 <body>
 

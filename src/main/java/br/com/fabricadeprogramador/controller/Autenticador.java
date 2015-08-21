@@ -28,7 +28,7 @@ public class Autenticador extends HttpServlet{
 		usu.setSenha(senha);
 		
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
-		Usuario usuAutenticado = usuarioDAO.autenticar(usu);
+		Usuario usuAutenticado = usuarioDAO.autenticar(usu);		
 		
 		if (usuAutenticado != null){
 			//Criando sessão
@@ -43,5 +43,12 @@ public class Autenticador extends HttpServlet{
 		}
 		
 	}
-		
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession sessao = req.getSession();
+		if (sessao != null){
+			sessao.invalidate();
+		}
+		resp.sendRedirect("login.html");
+	}
 }

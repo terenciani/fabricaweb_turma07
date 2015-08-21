@@ -8,6 +8,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script>
+	function excluir() {
+		if (window.confirm("Tem certezar que deseja excluir?")) {
+			//Acessando o id preenchido no campo
+			idDigitado = document.getElementById("id").value;
+			//Request GET
+			location.href = "estadocontroller.do?id=" + idDigitado;
+		}
+	}
+</script>
 </head>
 <body>
 	<%
@@ -19,8 +29,9 @@
 		UF: <input type="text" name="uf" value="<%=estado.getUF()%>">
 
 
-		<input type="submit" value="Salvar"> 
-		<input type="button" value="Excluir" onclick="javascript:excluir()" />
+		<input type="submit" value="Salvar"> <input type="button"
+			value="Excluir" onclick="javascript:excluir()" />
+
 	</form>
 </body>
 </html>

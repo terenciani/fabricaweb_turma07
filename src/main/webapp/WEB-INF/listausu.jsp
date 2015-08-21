@@ -10,24 +10,36 @@
 <title>Insert title here</title>
 
 
-<script>
-	function editar() {
+<script type="text/javascript">
+	function editar(id) {
 		if (window.confirm("Tem certezar que deseja editar?")) {
-			//Acessando o id preenchido no campo
-			idDigitado = document.getElementById("id").value;
 			//Request GET
-			location.href = "usucontroller.do?id=" + idDigitado + "?acao=edit";
+			location.href = "usucontroller.do?acao=alt&id=" + id;
+		}
+	};
+	
+	function excluir(id) {
+		if (window.confirm("Deseja realmente excluir?")) {
+			
+			//Request GET
+			location.href = "usucontroller.do?acao=exc&id=" + id;
 		}
 	}
 </script>
 </head>
 <body>
 
+<%@include file="menu.jsp" %>
+	
+	<a href="usucontroller.do?acao=cad">Novo</a>
 	<table border="1">
+
+		
 		<tr>
 			<th>ID</th>
 			<th>NOME</th>
-			<th>EDITAR</th>
+			<th>&nbsp; </th>
+			<th>&nbsp; </th>
 		</tr>
 		<%
 			//Acessando dados do Servlet
@@ -37,7 +49,9 @@
 		<tr>
 			<td><%=u.getId()%></td>
 			<td><%=u.getNome()%></td>
-			<td><a href="usucontroller.do?acao=alt&id=<%=u.getId()%>">Editar</a></td>
+			<td><a href="javascript:editar(<%=u.getId()%>)">Editar</a></td>
+			<td><a href="javascript:excluir(<%=u.getId()%>)">Excluir</a></td>
+
 		</tr>
 		<%
 			}
