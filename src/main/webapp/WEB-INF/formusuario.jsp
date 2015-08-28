@@ -25,7 +25,7 @@
 %>
 	<form action="usucontroller.do" method="POST">
 		ID: <input type="text" name="id" id="id" value="<%=usu.getId()%>">
-		Nome: <input text" name="nome" value="<%=usu.getNome()%>">
+		Nome: <input type="text" name="nome" value="<%=usu.getNome()%>">
 		Login: <input type="text" name="login" value="<%=usu.getLogin()%>">
 		Senha: <input type="password" name="senha" value="<%=usu.getSenha()%>">
 		
